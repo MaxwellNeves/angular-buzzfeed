@@ -34,22 +34,20 @@ export class QuizzComponent implements OnInit {
     this.answers.push(value)
     this.nextStep()
   }
-
   async nextStep(){
     this.questionIndex += 1
 
-    if(this.questionIndex > this.questionIndex){
+    if(this.questionMaxIndex > this.questionIndex){
       this.questionSelected = this.questions[this.questionIndex]
     } else{
-      let finalAnswer:string = await this.checkResult(this.answers)
+      const finalAnswer:string = await this.checkResult(this.answers)
       this.finished = true
       this.answersSelected = quizz_questions.results[finalAnswer as keyof typeof quizz_questions.results]
     }
   }
 
- async checkResult(answers:string[]){
-
-    let result = answers.reduce((previous, current, i, arr) =>{
+ async checkResult(answers:string[]): Promise<string>{
+    const result = answers.reduce((previous, current, i, arr) => {
       if(
         arr.filter(item => item === previous).length >
          arr.filter(item => item === current).length
@@ -57,7 +55,7 @@ export class QuizzComponent implements OnInit {
           return previous
       }else{
           return current
-        }
+      }
       }
     )
     return result
